@@ -2,35 +2,32 @@ import SwiftUI
 
 struct ContentView: View {
   @State var name: String = ""
-  @State var tarefas: [String] = ["Primeira tarefa"]
-  @State var currentTarefaId: String = ""
-  @State var updateTaskModalIsOpen: Bool = false
+  @State var tasks: [String] = ["Primeira tarefa"]
+  @State var selectedTaskId: String = ""
   
   func handleInsertNewTask() {
     if !name.isEmpty {
-      tarefas.append(name)
+      tasks.append(name)
       name = ""
     }
   }
   
-  func delete(tarefaName: String){
-    tarefas.removeAll{
-      tarefa in tarefa == tarefaName
+  func delete(taskName: String){
+    tasks.removeAll{
+      task in task == taskName
     }
   }
   
-  func setCurrentTarefaId(tarefa: String){
-    currentTarefaId = tarefa
-    updateTaskModalIsOpen = true
+  func setCurrentTarefaId(task: String){
+    selectedTaskId = task
   }
   
-  func updateTask(newText: String){
-    if let index = tarefas.firstIndex(where: { $0 == currentTarefaId }) {
-      tarefas[index] = newText
+  func updateTask(newTask: String){
+    if let index = tasks.firstIndex(where: { $0 == selectedTaskId }) {
+      tasks[index] = newTask
     }
     
-    updateTaskModalIsOpen = false
-    currentTarefaId = ""
+    selectedTaskId = ""
   }
   
   var body: some View {
@@ -49,24 +46,13 @@ struct ContentView: View {
         }
       }
       
-      ForEach(tarefas, id: \.self) { tarefa in
+      ForEach(tasks, id: \.self) { task in
         
-        updateTaskModalIsOpen ?
         HStack {
-          Text(tarefa)
+          Text("\(task)")
           Spacer()
           Button(action: {
-            delete(tarefaName: tarefa)
-          }) {
-            Image(systemName:"trash")
-              .foregroundColor(.black)
-          }
-        }.padding(.top, 25) :
-        HStack {
-          TextField("Informe a nova tarefa", text: $name)
-          Spacer()
-          Button(action: {
-            delete(tarefaName: tarefa)
+            delete(taskName: task)
           }) {
             Image(systemName:"trash")
               .foregroundColor(.black)
